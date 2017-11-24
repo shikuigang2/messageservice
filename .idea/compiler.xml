@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="m-api" />
+        <module name="m-core" />
+        <module name="m-gate" />
+        <module name="m-registcenter" />
+        <module name="m-send" />
+        <module name="m-user" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="m-api" target="1.8" />
+      <module name="m-core" target="1.6" />
+      <module name="m-gate" target="1.8" />
+      <module name="m-registcenter" target="1.6" />
+      <module name="m-send" target="1.8" />
+      <module name="m-user" target="1.6" />
+      <module name="messageservice" target="1.6" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/m-api/m-api.iml" filepath="$PROJECT_DIR$/m-api/m-api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/m-core/m-core.iml" filepath="$PROJECT_DIR$/m-core/m-core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/m-gate/m-gate.iml" filepath="$PROJECT_DIR$/m-gate/m-gate.iml" />
+      <module fileurl="file://$PROJECT_DIR$/m-registcenter/m-registcenter.iml" filepath="$PROJECT_DIR$/m-registcenter/m-registcenter.iml" />
+      <module fileurl="file://$PROJECT_DIR$/m-api/m-send.iml" filepath="$PROJECT_DIR$/m-api/m-send.iml" />
+      <module fileurl="file://$PROJECT_DIR$/m-user/m-user.iml" filepath="$PROJECT_DIR$/m-user/m-user.iml" />
+      <module fileurl="file://$PROJECT_DIR$/messageservice.iml" filepath="$PROJECT_DIR$/messageservice.iml" />
+    </modules>
+  </component>
+</project>
