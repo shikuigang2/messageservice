@@ -30,9 +30,6 @@ public class SessionAccessFilter extends ZuulFilter {
     @Autowired
     public JedisPool  jedisPool;
 
-    @Value("${zuul.prefix}")
-    private String zuulPrefix;
-
     @Override
     public Object run(){
         RequestContext ctx = RequestContext.getCurrentContext();

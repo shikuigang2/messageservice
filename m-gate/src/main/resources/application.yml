@@ -32,12 +32,10 @@ zuul:
       admin:
             path: /user/**
             serviceId: m-user
-            stripPrefix: false
 
-      user:
+      msg:
             path: /msg/**
             serviceId: m-api
-            stripPrefix: false
 
       auth:
             path: /auth/**

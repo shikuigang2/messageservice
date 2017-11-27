@@ -30,10 +30,10 @@ public  class BlowfishUtil {
         return str;
     }
 
-    public static  String encodeUserInfo(JWTInfo userinfo){
+/*    public static  String encodeUserInfo(JWTInfo userinfo){
         String randomNum = getRandomCharAndNumr(6);
         return new Blowfish(randomNum).encryptString(JSON.toJSONString(userinfo))+randomNum;
-    }
+    }*/
 
     public static String decodeUserInfo(String userinfoStr){
         String randomNum = getRandomCharAndNumr(8);

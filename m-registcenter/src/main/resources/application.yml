@@ -1,12 +1,10 @@
 spring:
   application:
     name: microservice-eureka-server
-  profiles: peer1
+
 server:
   port: 8761
 eureka:
-  instance:
-    hostname: eureka-server-peer1
   server:
     enable-self-preservation: false
     eviction-interval-timer-in-ms: 4000

@@ -11,14 +11,5 @@
     <result column="paraset" jdbcType="LONGVARCHAR" property="paraset" />
     <result column="resultset" jdbcType="LONGVARCHAR" property="resultset" />
   </resultMap>
-  <resultMap id="BaseResultMap" type="com.ztth.api.path.entity.ApiPath">
-    <!--
-      WARNING - @mbg.generated
-    -->
-    <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="uri" jdbcType="VARCHAR" property="uri" />
-    <result column="flag" jdbcType="VARCHAR" property="flag" />
-    <result column="paraset" jdbcType="LONGVARCHAR" property="paraset" />
-    <result column="resultset" jdbcType="LONGVARCHAR" property="resultset" />
-  </resultMap>
+
 </mapper>
