@@ -4,7 +4,7 @@ logging:
         com.ztth.msg.api: DEBUG
 spring:
     application:
-        name: m-api
+        name: m-send-2
     jackson:
         date-format: yyyy-MM-dd HH:mm:ss
         time-zone: GMT+8
@@ -35,7 +35,7 @@ mybatis:
     xmlLocation: classpath:mapper/**/*.xml
 
 server:
-    port: 8762
+    port: 8767
 
 message:
     httpUrl: http://testmsg.com
@@ -43,7 +43,8 @@ message:
     key: 23423k4j2234h2k34h # 接口调用 安全密钥
     queueIn: messageIn
     queueOut: messageOut
-    maxLength: 200
+    maxLength: 20
+    reponseType: utf-8
 
 redis:
     database: 1
@@ -76,8 +77,9 @@ eureka:
             defaultZone: http://localhost:8761/eureka/
         healthcheck:
               enabled: true
-                    # docker 部署开启
-#            defaultZone: http://center:8761/eureka/
+
+#执行线程池配置
+
 
 
 

@@ -14,9 +14,9 @@
         </plugin>
 
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"
-                        connectionURL="jdbc:mysql://localhost:3306/ztthmsg?useUnicode=true&amp;characterEncoding=UTF8"
+                        connectionURL="jdbc:mysql://39.106.156.121:3306/ztthmsg?useUnicode=true&amp;characterEncoding=UTF8"
                         userId="root"
-                        password="root">
+                        password="ztthpassword">
         </jdbcConnection>
 
         <javaModelGenerator targetPackage="${targetModelPackage}" targetProject="${targetJavaProject}"/>
@@ -27,7 +27,7 @@
                              type="XMLMAPPER"/>
 
 
-        <table tableName="t_message" domainObjectName="Message">
+        <table tableName="mobile_data" domainObjectName="MobileData">
         </table>
     </context>
 </generatorConfiguration>

@@ -14,6 +14,8 @@
         <module>m-api</module>
         <module>m-user</module>
         <module>m-core</module>
+        <module>m-send</module>
+        <module>m-idgenerate</module>
     </modules>
 
     <parent>
@@ -21,11 +23,11 @@
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>1.5.4.RELEASE</version>
     </parent>
-<!--    <properties>
-        <docker.image.prefix>message</docker.image.prefix>
+    <properties>
+        <docker.image.prefix>msg</docker.image.prefix>
         <docker.plugin.version>0.4.13</docker.plugin.version>
         <mapper.version>3.4.0</mapper.version>
-    </properties>-->
+    </properties>
 
     <dependencyManagement>
         <dependencies>
