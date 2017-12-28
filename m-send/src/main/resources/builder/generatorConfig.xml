@@ -27,7 +27,7 @@
                              type="XMLMAPPER"/>
 
 
-        <table tableName="mobile_data" domainObjectName="MobileData">
+        <table tableName="mobile_channel" domainObjectName="MobileChannel">
         </table>
     </context>
 </generatorConfiguration>

@@ -10,9 +10,12 @@ import com.ztth.api.path.entity.Message;
 import com.ztth.api.path.entity.MessageLog;
 import com.ztth.api.path.entity.MobileData;
 import com.ztth.api.path.spring.SpringUtil;
+import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
+
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
@@ -54,47 +57,12 @@ public class PostSendThread extends Thread {
 
     public void run() {
 
-    /*    CloseableHttpClient httpClient = null;
+        CloseableHttpClient httpClient = null;
         CloseableHttpResponse response = null;
         HttpEntity entity = null;
         String responseContent = null;
         HttpPost httpPost = new HttpPost(httpUrl);
 
-        //添加参数
-        List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
-        for (String key : maps.keySet()) {
-            nameValuePairs.add(new BasicNameValuePair(key, maps.get(key)));
-        }
-        try {
-            httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs, reponseType));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        try {
-            // 创建默认的httpClient实例.
-            httpClient = HttpClients.createDefault();
-            httpPost.setConfig(requestConfig);
-            // 执行请求
-            response = httpClient.execute(httpPost);
-            entity = response.getEntity();
-            responseContent = EntityUtils.toString(entity, reponseType);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                // 关闭连接,释放资源
-                if (response != null) {
-                    response.close();
-                }
-                if (httpClient != null) {
-                    httpClient.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    */
         RedisQueueBiz redisQueueBiz = SpringUtil.getBean("redisQueueBiz",RedisQueueBiz.class);
         MessageConfig messageConfig = SpringUtil.getBean("messageConfig",MessageConfig.class);
         MobileDataBiz mobileDataBiz = SpringUtil.getBean("mobileDataBiz",MobileDataBiz.class);
@@ -128,12 +96,74 @@ public class PostSendThread extends Thread {
                 //查询数据 并添加到redis
                 mobileData = mobileDataBiz.selectMobileData(mobileMiddle);
                 redisQueueBiz.set(String.valueOf(mobileMiddle),JSON.toJSONString(mobileData));
-
             }else{
                  mobileData = JSON.parseObject(mobileDataStr,MobileData.class)  ;
             }
             //根据 网段找到 相应的通道 信息 发送信息
             Thread.sleep(random.nextInt(5)*1000 ); //模拟发送时间 5 秒
+
+            if(mobileData.getChannel().equals("联通")){
+
+            }else if(mobileData.getChannel().equals("移动")){
+
+            }else if(mobileData.getChannel().equals("电信")){
+
+            }else{
+                //错误手机号号码来源
+            }
+            //短信发送参考例子 http://blog.sina.com.cn/s/blog_13e4b87b80102x5lf.html
+
+
+            //添加参数
+            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+            for (String key : maps.keySet()) {
+                nameValuePairs.add(new BasicNameValuePair(key, maps.get(key)));
+            }
+            try {
+                httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs, reponseType));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+                // 创建默认的httpClient实例.
+                httpClient = HttpClients.createDefault();
+                httpPost.setConfig(requestConfig);
+                // 执行请求
+                response = httpClient.execute(httpPost);
+                entity = response.getEntity();
+                responseContent = EntityUtils.toString(entity, reponseType);
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    // 关闭连接,释放资源
+                    if (response != null) {
+                        response.close();
+                    }
+                    if (httpClient != null) {
+                        httpClient.close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+/*            HttpClient client = new HttpClient();
+            PostMethod post = new PostMethod("http://sms.webchinese.cn/web_api/");
+            post.addRequestHeader("Content-Type",  "application/x-www-form-urlencoded;charset=gbk"); //在头文件中设置转码
+            NameValuePair[] data = { new NameValuePair("Uid", "polaris"),        //注册的用户名
+                    new NameValuePair("Key", "c83102f7fea3a7053643"),   //注册成功后，登录网站，在"修改短信接口密钥"这一栏里面
+                    new NameValuePair("smsMob", "188xxxxxxxx"),               // 需要发送的手机号码
+                    new NameValuePair("smsText", "验证码：9999") };           //需要发送的短信内容
+            post.setRequestBody(data);
+            client.executeMethod(post);
+            Header[] headers = post.getResponseHeaders();
+            int statusCode = post.getStatusCode();
+            String result = new String(post.getResponseBodyAsString().getBytes( "gbk"));
+            System.out.println(result);
+            post.releaseConnection();*/
+
 
             //从发送队列中移除
             redisQueueBiz.delqueue(messageConfig.getQueueOut(),messagejson);

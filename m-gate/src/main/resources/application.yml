@@ -63,6 +63,13 @@ hystrix:
           thread:
             timeoutInMilliseconds: 50000
 
+security:
+  basic:
+    enabled: true
+  user:
+    name: ztth  # 用户名
+    password: ztthpass   # 用户密码
+
 eureka:
     instance:
         statusPageUrlPath: /info
@@ -72,7 +79,7 @@ eureka:
 #        ip-address: 127.0.0.1
     client:
         serviceUrl:
-            defaultZone: http://localhost:8761/eureka/
+            defaultZone: http://${security.user.name}:${security.user.password}@localhost:8761/eureka/
 
 
 

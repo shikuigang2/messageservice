@@ -4,15 +4,25 @@ spring:
 
 server:
   port: 8761
+security:
+  basic:
+    enabled: true
+  user:
+    name: ztth  # 用户名
+    password: ztthpass   # 用户密码
 eureka:
+  enviroment: product
   instance:
     prefer-ip-address: true
+    hostname: 30.106.154.236
   server:
     enable-self-preservation: false
     eviction-interval-timer-in-ms: 4000
   client:
      registerWithEureka: false  #false:不作为一个客户端注册到注册中心
      fetchRegistry: false      #为true时，可以启动，但报异常：Cannot execute request on any known server
+#     service-url:
+#        defaultZone: http://ztth:ztthpass@30.106.154.236:${server.port}/eureka/
 #     serviceUrl:
 #      defaultZone: http://eureka-server-peer2:8762/eureka/,http://eureka-server-peer3:8763/eureka/  #使用集群时 启用
 
