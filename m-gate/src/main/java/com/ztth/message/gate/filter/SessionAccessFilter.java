@@ -42,6 +42,8 @@ public class SessionAccessFilter extends ZuulFilter {
 
         //操作在转发之前
         System.out.println(requestUri);
+        System.out.println(request.getRemoteAddr());
+        System.out.println(request.getRemoteHost());
 
 
 

@@ -43,7 +43,7 @@ message:
     key: 23423k4j2234h2k34h # 接口调用 安全密钥
     queueIn: messageIn
     queueOut: messageOut
-    maxLength: 20
+    maxLength: 200 #发送链接最大长度
     reponseType: utf-8
 
 redis:
@@ -61,6 +61,13 @@ redis:
           timeout: 3000
           maxAttempts: 5
 
+security:
+  basic:
+    enabled: true
+  user:
+    name: ztth  # 用户名
+    password: ztthpass   # 用户密码
+
 eureka:
     instance:
         statusPageUrlPath: /info
@@ -74,7 +81,7 @@ eureka:
         registerWithEureka: true
         fetchRegistry: true
         serviceUrl:
-            defaultZone: http://localhost:8761/eureka/
+             defaultZone: http://${security.user.name}:${security.user.password}@localhost:8761/eureka/
         healthcheck:
               enabled: true
 

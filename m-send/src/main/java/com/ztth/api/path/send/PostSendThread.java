@@ -109,9 +109,9 @@ public class PostSendThread extends Thread {
             }else if(mobileData.getChannel().equals("电信")){
 
             }else{
-                //错误手机号号码来源
+                //错误手机号号码来源,写入 failurelog
             }
-            //短信发送参考例子 http://blog.sina.com.cn/s/blog_13e4b87b80102x5lf.html
+         /*    //短信发送参考例子 http://blog.sina.com.cn/s/blog_13e4b87b80102x5lf.html
 
 
             //添加参数
@@ -148,7 +148,7 @@ public class PostSendThread extends Thread {
                     e.printStackTrace();
                 }
             }
-
+*/
 /*            HttpClient client = new HttpClient();
             PostMethod post = new PostMethod("http://sms.webchinese.cn/web_api/");
             post.addRequestHeader("Content-Type",  "application/x-www-form-urlencoded;charset=gbk"); //在头文件中设置转码

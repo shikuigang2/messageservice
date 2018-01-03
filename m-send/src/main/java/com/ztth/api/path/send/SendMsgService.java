@@ -61,17 +61,20 @@ public class SendMsgService implements CommandLineRunner {
                long lengthout = redisQueueBiz.getQueueLength(messageConfig.getQueueOut());
                //正在发送中并发处理
                 if(lengthout > messageConfig.getMaxLength() ){ //达到最大并发数量
-                    System.out.println("达到最大并发数 等待1秒");
-                    Thread.sleep(200);//等待 一秒
+                    System.out.println("达到最大并发数 等待200秒");
+                    Thread.sleep(100);//等待 一秒
                 }else{
                     if(lengthin>0){
                         //出待发队列
                         String objdata = redisQueueBiz.rpop(messageConfig.getQueueIn());
                         //入正在发送队列
-                        redisQueueBiz.lpush(messageConfig.getQueueOut(),objdata);
+
                         Message message = JSON.parseObject(objdata, new TypeReference<Message>() {});
+                        
+
+                        redisQueueBiz.lpush(messageConfig.getQueueOut(),objdata);
                         //发送成功后
-                        System.out.println("发送中......");
+                       // System.out.println("发送中......");
                        /* public PostSendThread(String httpUrl,Map<String, String> maps,String reponseType,int count,String queuecOut){
                             this.httpUrl = httpUrl;
                             this.maps = maps;
