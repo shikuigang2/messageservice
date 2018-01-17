@@ -24,7 +24,7 @@ public class UserAdminBiz extends BaseBiz<AdminUserMapper,AdminUser> {
     }
 
     public int addAdminUser(AdminUser adminUser){
-        return  adminUserMapper.insert(adminUser);
+        return  adminUserMapper.insertSelective(adminUser);
     }
 
     public int updateAdminUser(AdminUser adminUser){
