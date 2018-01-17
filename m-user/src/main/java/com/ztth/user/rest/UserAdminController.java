@@ -42,7 +42,7 @@ public class UserAdminController {
             resMap.put("msg","invalid mobile");
             return ResponseEntity.status(400).body(resMap);
         }else{
-            if(user.getPassword().equals(key)){
+            if(user.getKey().equals(key)){
                 Map<String,String> map = new HashMap<String,String>();
                 String token = new Blowfish(key).encryptString(mobile);
                 redisUserBiz.set(token,JSON.toJSONString(user), UserConstant.EXPIRT_USER);
@@ -62,7 +62,7 @@ public class UserAdminController {
     @ResponseBody
     public ResponseEntity<?> sendGet(AdminUser adminUser) throws Exception {
 
-        String  pass =  adminUser.getPassword();
+        String  pass =  adminUser.getKey();
         String  mobile =  adminUser.getMobile();
         String  username = adminUser.getUsername();
 
@@ -125,9 +125,25 @@ public class UserAdminController {
         }else{
 
             AdminUser user  = JSON.parseObject(userStr, new TypeReference<AdminUser>() {});
-            user.setPassword(null);
+            //user.setPassword(null);
+            user.setKey(null);
             //user.setStatus(null);
             return ResponseEntity.status(200).body(user);
+        }
+
+    }
+
+    @RequestMapping(value = "/getAdminList")
+    @ResponseBody
+    public ResponseEntity<?> getAdminList(String token) throws Exception {
+
+        String userStr = redisUserBiz.get(token.trim());
+
+        if(userStr == null){
+            return ResponseEntity.status(500).body("{code:500,msg:'token invalid or overdue'}");
+        }else{
+
+            return ResponseEntity.status(200).body(userAdminBiz.getAdminUserList());
         }
 
     }

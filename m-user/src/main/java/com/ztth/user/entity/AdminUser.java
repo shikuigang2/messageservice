@@ -11,7 +11,15 @@ public class AdminUser {
 
     private String mobile;
 
-    private String password;
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    private String key;
 
     private Integer status;
 
@@ -55,20 +63,6 @@ public class AdminUser {
      */
     public void setMobile(String mobile) {
         this.mobile = mobile;
-    }
-
-    /**
-     * @return password
-     */
-    public String getPassword() {
-        return password;
-    }
-
-    /**
-     * @param password
-     */
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     /**
