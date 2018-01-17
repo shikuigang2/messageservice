@@ -11,15 +11,15 @@ public class AdminUser {
 
     private String mobile;
 
-    public String getKey() {
-        return key;
+    public String getMsgkey() {
+        return msgkey;
     }
 
-    public void setKey(String key) {
-        this.key = key;
+    public void setMsgkey(String msgkey) {
+        this.msgkey = msgkey;
     }
 
-    private String key;
+    private String msgkey;
 
     private Integer status;
 
