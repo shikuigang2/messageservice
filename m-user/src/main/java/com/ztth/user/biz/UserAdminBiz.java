@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service("userAdminBiz")
@@ -28,5 +29,9 @@ public class UserAdminBiz extends BaseBiz<AdminUserMapper,AdminUser> {
 
     public int updateAdminUser(AdminUser adminUser){
         return  adminUserMapper.updateByPrimaryKeySelective(adminUser);
+    }
+
+    public List<AdminUser> getAdminUserList(){
+        return super.selectListAll();
     }
 }
