@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ztth.api.path.mapper.MobileChannelMapper">
+  <resultMap id="BaseResultMap" type="com.ztth.api.path.entity.MobileChannel">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="channelName" jdbcType="VARCHAR" property="channelname" />
+    <result column="enterpriseCode" jdbcType="VARCHAR" property="enterprisecode" />
+    <result column="accountName" jdbcType="VARCHAR" property="accountname" />
+    <result column="accountPassword" jdbcType="VARCHAR" property="accountpassword" />
+    <result column="gatewayIP" jdbcType="VARCHAR" property="gatewayip" />
+    <result column="connectPort" jdbcType="VARCHAR" property="connectport" />
+    <result column="channelStartDate" jdbcType="DATE" property="channelstartdate" />
+    <result column="channelEndDate" jdbcType="DATE" property="channelenddate" />
+    <result column="msgCount" jdbcType="INTEGER" property="msgcount" />
+    <result column="attr1" jdbcType="VARCHAR" property="attr1" />
+    <result column="attr2" jdbcType="VARCHAR" property="attr2" />
+    <result column="attr3" jdbcType="VARCHAR" property="attr3" />
+  </resultMap>
+
+  <select id="getMobileChannelByEnterpriseNum" parameterType="java.util.Map" resultMap="BaseResultMap">
+    SELECT * FROM mobile_channel WHERE  enterpriseCode=#{enterpriseCode,jdbcType=VARCHAR}
+  </select>
+
+</mapper>

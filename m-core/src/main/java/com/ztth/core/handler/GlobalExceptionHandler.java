@@ -12,7 +12,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletResponse;
 
 
-@ControllerAdvice("com.ztth")
+//@ControllerAdvice("com.ztth")
+@ControllerAdvice
 @ResponseBody
 public class GlobalExceptionHandler {
     private Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);

@@ -77,5 +77,35 @@ public class MessageConfig {
 
     private String key;
 
+    public String getChannel() {
+        return channel;
+    }
+
+    public void setChannel(String channel) {
+        this.channel = channel;
+    }
+
+    private String channel;//发送渠道
+
+    public String getSingleSendUrl() {
+        return singleSendUrl;
+    }
+
+    public void setSingleSendUrl(String singleSendUrl) {
+        this.singleSendUrl = singleSendUrl;
+    }
+    private String  singleSendUrl;
+
+    private String batchSendUrl;
+    public String getBatchSendUrl() {
+        return batchSendUrl;
+    }
+
+    public void setBatchSendUrl(String batchSendUrl) {
+        this.batchSendUrl = batchSendUrl;
+    }
+
+
+
 
 }

@@ -4,7 +4,7 @@ logging:
         com.ztth.msg.api: DEBUG
 spring:
     application:
-        name: m-send-2
+        name: m-send
     jackson:
         date-format: yyyy-MM-dd HH:mm:ss
         time-zone: GMT+8
@@ -38,13 +38,16 @@ server:
     port: 8767
 
 message:
-    httpUrl: http://testmsg.com
-    uri: 用户登录id
-    key: 23423k4j2234h2k34h # 接口调用 安全密钥
+    httpUrl: http://www.api.zthysms.com
+    uri: ztthznhy
+    key: 90yj1b # 接口调用 安全密钥
     queueIn: messageIn
     queueOut: messageOut
     maxLength: 200 #发送链接最大长度
     reponseType: utf-8
+    singleSendUrl: http://www.api.zthysms.com/sendSms.do
+    batchSendUrl: http://www.api.zthysms.com/sendSmsBatch.do
+    messageCount: http://www.api.zthysms.com/balance.do
 
 redis:
     database: 1
@@ -85,7 +88,10 @@ eureka:
         healthcheck:
               enabled: true
 
-#执行线程池配置
+#非短信渠道商 第三方接口 临时调用
+
+
+
 
 
 

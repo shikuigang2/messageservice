@@ -2,11 +2,14 @@ package com.ztth.api.path.send;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
+import com.ztth.api.path.biz.MobileChannelBiz;
 import com.ztth.api.path.biz.MsgLogBiz;
 import com.ztth.api.path.biz.RedisQueueBiz;
 import com.ztth.api.path.config.MessageConfig;
 import com.ztth.api.path.entity.Message;
+import com.ztth.api.path.entity.MobileChannel;
 import com.ztth.api.path.spring.SpringUtil;
+import com.ztth.core.constant.ServerConstant;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.config.RequestConfig;
@@ -17,6 +20,8 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
@@ -25,17 +30,23 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 @Component
 public class SendMsgService implements CommandLineRunner {
 
+    private Logger logger = LoggerFactory.getLogger(SendMsgService.class);
+
     @Autowired
     private RedisQueueBiz redisQueueBiz;
 
     @Autowired
     private MessageConfig messageConfig;
+
+    @Autowired
+    private MobileChannelBiz mobileChannelBiz;
 
     private ExecutorService executorService = Executors.newCachedThreadPool();
 /*
@@ -52,43 +63,51 @@ public class SendMsgService implements CommandLineRunner {
     @Override
     public void run(String... strings) throws Exception {
 
-
+           boolean needSleep = false;
             while(true){
-                //获取队列中待发 信息
-                //获取待发长度
-               long lengthin = redisQueueBiz.getQueueLength(messageConfig.getQueueIn());
-               //获取正在发送中队列长度
-               long lengthout = redisQueueBiz.getQueueLength(messageConfig.getQueueOut());
-               //正在发送中并发处理
-                if(lengthout > messageConfig.getMaxLength() ){ //达到最大并发数量
-                    System.out.println("达到最大并发数 等待200秒");
-                    Thread.sleep(100);//等待 一秒
-                }else{
-                    if(lengthin>0){
-                        //出待发队列
-                        String objdata = redisQueueBiz.rpop(messageConfig.getQueueIn());
-                        //入正在发送队列
+                /**
+                 * 获取待发队列中的数据
+                 */
+               Set<String> queueSet = redisQueueBiz.getSetQueue(ServerConstant.WAITING_SET);
+               for(String queStr:queueSet){
+                   long lengthin = redisQueueBiz.getQueueLength(queStr);
+                   //获取正在发送中队列长度
+                   String enterpriseCode = queStr.substring(4);//企业代码
+                   long lengthout = redisQueueBiz.getQueueLength(ServerConstant.SEND_PREFIX+queStr.substring(4));
 
-                        Message message = JSON.parseObject(objdata, new TypeReference<Message>() {});
-                        
+                   String concurrent = redisQueueBiz.get("enterpriseCode");//该企业的最大并发数
+                    if(concurrent == null || concurrent.equals("")){
+                        MobileChannel m = mobileChannelBiz.getMaxConcurrentNumber(enterpriseCode);
 
-                        redisQueueBiz.lpush(messageConfig.getQueueOut(),objdata);
-                        //发送成功后
-                       // System.out.println("发送中......");
-                       /* public PostSendThread(String httpUrl,Map<String, String> maps,String reponseType,int count,String queuecOut){
-                            this.httpUrl = httpUrl;
-                            this.maps = maps;
-                            this.reponseType = reponseType;
-                            this.count = count;
-                            this.queuecOut = queuecOut;
-                        }*/
-                        // System.out.println("创建线程");
-                        executorService.execute(new PostSendThread(messageConfig,message));
+                        if(m == null){
+                            logger.info("没找到发送 渠道");
+                            break;
+                        }
+                        concurrent = m.getAttr1();
+                        redisQueueBiz.set(enterpriseCode,concurrent);
                     }
 
-                }
+                   //正在发送中并发处理
+                   if(lengthout >Integer.parseInt(concurrent)){ //达到最大并发数量
+                       logger.error("通道："+queStr+"达到最大并发");
+                       //break; //跳出当前循环
+                   }else{
+                       if(lengthin>0){
+                           //System.out.println(queStr);
+                           //出待发队列
+                           String objdata = redisQueueBiz.rpop(queStr);
+                           //入正在发送队列
+                           Message message = JSON.parseObject(objdata, new TypeReference<Message>() {});
+                           //还有排队一种状态 忽略 暂时
+                          // redisQueueBiz.lpush(ServerConstant.SEND_PREFIX+queStr.substring(4),objdata);//准备发送不一定执行
+                           // System.out.println("创建线程");
 
+                           messageConfig.setChannel(queStr);
+                           executorService.execute(new PostSendThread(messageConfig,message));
+                       }
 
+                   }
+               }
 
                /*  MsgLog msgLog = JSON.parseObject(objdata, new TypeReference<MsgLog>() {});
 
@@ -111,7 +130,6 @@ public class SendMsgService implements CommandLineRunner {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
 
                 CloseableHttpClient httpClient = null;
                 CloseableHttpResponse response = null;

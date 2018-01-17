@@ -11,6 +11,7 @@ import redis.clients.jedis.JedisPool;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
 @Service("redisQueueBiz")
 public class RedisQueueBiz {
@@ -190,7 +191,90 @@ public class RedisQueueBiz {
                 return null;
         }
 
+        public Long getTotalLength(String prefix){
+                Jedis jedis = null;
+                try {
+                        jedis = jedisPool.getResource();
+                        Set<String> keyset = jedis.keys(prefix+"%");
+                        long len = 0;
+                        for (String str : keyset) {
+                                len +=jedis.llen(str);
+                        }
 
+                        return len;
+                }catch (Exception e){
+                        logger.error("Jedis get 异常" + e.getMessage());
+                        return 0L;
+                }finally {
+                        if(jedis != null){
+                                jedis.close();
+                        }
+                }
+        }
 
+        /**
+         * 获取所有的等待队列
+         */
+       /* public Set<String> getQueueSetString(String prefix){
+                Jedis jedis = null;
+                try {
+                        jedis = jedisPool.getResource();
+                        Set<String> keyset = jedis.keys(prefix+"%");
+                       return keyset;
+                }catch (Exception e){
+                        logger.error("Jedis get 异常" + e.getMessage());
+                        return null;
+                }finally {
+                        if(jedis != null){
+                                jedis.close();
+                        }
+                }
+        }*/
+
+        public Set<String> getSetQueue(String key){
+                Jedis jedis = null;
+                try {
+                        jedis = jedisPool.getResource();
+                        Set<String> set = jedis.smembers(key);;
+                        return set;
+                }catch (Exception e){
+                        logger.error("Jedis get 异常" + e.getMessage());
+                        return null;
+                }finally {
+                        if(jedis != null){
+                                jedis.close();
+                        }
+                }
+        }
+
+        //集合操作
+        public void sSet(String key,String  value){
+                Jedis jedis = null;
+                try {
+                        jedis = jedisPool.getResource();
+                        jedis.sadd(key, value);
+                }catch (Exception e){
+                        logger.error("Jedis get 异常" + e.getMessage());
+                }finally {
+                        if(jedis != null){
+                                jedis.close();
+                        }
+                }
+        }
+
+        public boolean isSetValue(String key,String  value){
+                Jedis jedis = null;
+                try {
+                        jedis = jedisPool.getResource();
+                        return jedis.sismember(key, value);
+                }catch (Exception e){
+                        logger.error("Jedis set 异常" + e.getMessage());
+                        return false;
+                }finally {
+                        if(jedis != null){
+                                jedis.close();
+                        }
+                }
+        }
 
 }
