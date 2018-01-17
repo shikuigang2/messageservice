@@ -3,6 +3,7 @@ package com.ztth.user.rest;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import com.ztth.core.msg.BaseResponse;
+import com.ztth.core.msg.ObjectRestResponse;
 import com.ztth.core.util.Blowfish;
 import com.ztth.core.util.PhoneFormatCheckUtils;
 import com.ztth.user.constant.UserConstant;
@@ -29,7 +30,7 @@ public class UserAdminController {
 
     @RequestMapping(value = "/getToken")
     @ResponseBody
-    public ResponseEntity<?> sendPost(String mobile,String key) throws Exception {
+    public ResponseEntity<?> sendPost(String mobile,String msgkey) throws Exception {
         //System.out.println(mobile);
         Map<String,Object> resMap = new HashMap<String,Object>();
 
@@ -42,9 +43,9 @@ public class UserAdminController {
             resMap.put("msg","invalid mobile");
             return ResponseEntity.status(400).body(resMap);
         }else{
-            if(user.getKey().equals(key)){
+            if(user.getMsgkey().equals(msgkey)){
                 Map<String,String> map = new HashMap<String,String>();
-                String token = new Blowfish(key).encryptString(mobile);
+                String token = new Blowfish(msgkey).encryptString(mobile);
                 redisUserBiz.set(token,JSON.toJSONString(user), UserConstant.EXPIRT_USER);
                 resMap.put("code",200);
                 resMap.put("token",token);
@@ -62,7 +63,7 @@ public class UserAdminController {
     @ResponseBody
     public ResponseEntity<?> sendGet(AdminUser adminUser) throws Exception {
 
-        String  pass =  adminUser.getKey();
+        String  pass =  adminUser.getMsgkey();
         String  mobile =  adminUser.getMobile();
         String  username = adminUser.getUsername();
 
@@ -93,9 +94,13 @@ public class UserAdminController {
         int i = userAdminBiz.addAdminUser(adminUser);
 
         if(i==0){
-           return  ResponseEntity.status(500).body("{code:500,}");
+            response.setStatus(500);
+            response.setMessage("internal error");
+           return  ResponseEntity.status(500).body(response);
         }else{
-            return ResponseEntity.status(200).body("{code:200,msg:'success'}");
+            response.setStatus(200);
+            response.setMessage("success");
+            return ResponseEntity.status(200).body(response);
         }
 
     }
@@ -105,11 +110,16 @@ public class UserAdminController {
     public ResponseEntity<?> updateUser(AdminUser adminUser) throws Exception {
 
         int i = userAdminBiz.updateAdminUser(adminUser);
-
+        BaseResponse response  = new BaseResponse();
         if(i==1){
+            response.setStatus(200);
+            response.setMessage("success");
             return ResponseEntity.status(200).body("{code:200,msg:'success'}");
         }else{
-            return ResponseEntity.status(500).body("{code:500,msg:'error'}");
+            response.setStatus(500);
+            response.setMessage("error");
+
+            return ResponseEntity.status(500).body(response);
         }
        //return null;
     }
@@ -120,15 +130,22 @@ public class UserAdminController {
 
         String userStr = redisUserBiz.get(token.trim());
 
+        ObjectRestResponse response  = new ObjectRestResponse();
+
         if(userStr == null){
-            return ResponseEntity.status(500).body("{code:500,msg:'token invalid or overdue'}");
+
+            response.setStatus(500);
+            response.setMessage("token invalid or overdue");
+            return ResponseEntity.status(500).body(response);
         }else{
 
             AdminUser user  = JSON.parseObject(userStr, new TypeReference<AdminUser>() {});
             //user.setPassword(null);
-            user.setKey(null);
+            user.setMsgkey(null);
             //user.setStatus(null);
-            return ResponseEntity.status(200).body(user);
+            response.setData(user);
+            response.setStatus(200);
+            return ResponseEntity.status(200).body(response);
         }
 
     }
@@ -138,12 +155,17 @@ public class UserAdminController {
     public ResponseEntity<?> getAdminList(String token) throws Exception {
 
         String userStr = redisUserBiz.get(token.trim());
-
+        ObjectRestResponse response  = new ObjectRestResponse();
         if(userStr == null){
-            return ResponseEntity.status(500).body("{code:500,msg:'token invalid or overdue'}");
-        }else{
 
-            return ResponseEntity.status(200).body(userAdminBiz.getAdminUserList());
+            response.setStatus(200);
+            response.setMessage("token invalid or overdue");
+
+            return ResponseEntity.status(200).body(response);
+        }else{
+            response.setStatus(200);
+            response.setData(userAdminBiz.getAdminUserList());
+            return ResponseEntity.status(200).body(response);
         }
 
     }
