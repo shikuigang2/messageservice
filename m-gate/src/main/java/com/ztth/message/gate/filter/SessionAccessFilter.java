@@ -49,7 +49,7 @@ public class SessionAccessFilter extends ZuulFilter {
         System.out.println(requestUri);
         System.out.println(request.getRemoteAddr());
         System.out.println(request.getRemoteHost());
-        if(requestUri.indexOf("/user/getToken") != -1){
+        if(requestUri.indexOf("/user/getToken")==-1){
             //判断token 是否过期
             String token  =  request.getParameter("token");
             System.out.println(token);
