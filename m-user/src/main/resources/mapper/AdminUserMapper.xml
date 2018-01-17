@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ztth.user.mapper.AdminUserMapper" >
+  <resultMap id="BaseResultMap" type="com.ztth.user.entity.AdminUser" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="username" property="username" jdbcType="VARCHAR" />
+    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+    <result column="key" property="key" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+  </resultMap>
+
+
+  <select id="getUserByMobile" resultType="java.util.Map"  resultMap="BaseResultMap">
+    SELECT  *  FROM  t_adminuser  WHERE  mobile = #{mobile}
+  </select>
+
+</mapper>
