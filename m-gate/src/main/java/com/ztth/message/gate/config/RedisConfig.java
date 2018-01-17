@@ -11,12 +11,12 @@ import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.cache.RedisCacheManager;
+/*import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;*/
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
@@ -55,7 +55,7 @@ public class RedisConfig {
 
         return jedisPool;
     }
-
+/*
     @Bean
     public JedisConnectionFactory redisConnectionFactory() {
         JedisConnectionFactory factory = new JedisConnectionFactory();
@@ -63,8 +63,9 @@ public class RedisConfig {
         factory.setPort(port);
         factory.setTimeout(timeout); // 设置连接超时时间
         return factory;
-    }
+    }*/
 
+/*
     @Bean
     public CacheManager cacheManager(RedisTemplate<?, ?> redisTemplate) {
         RedisCacheManager cacheManager = new RedisCacheManager(redisTemplate);
@@ -72,17 +73,18 @@ public class RedisConfig {
         cacheManager.setDefaultExpiration(10); // 设置key-value超时时间
         return cacheManager;
     }
+*/
 
-    @Bean
+ /*   @Bean
     public RedisTemplate<String, String> redisTemplate(RedisConnectionFactory factory) {
         StringRedisTemplate template = new StringRedisTemplate(factory);
         setSerializer(template); // 设置序列化工具，这样ReportBean不需要实现Serializable接口
         //redisTemplate.setDefaultSerializer(new StringRedisSerializer());
         template.afterPropertiesSet();
         return template;
-    }
+    }*/
 
-    private void setSerializer(StringRedisTemplate template) {
+/*    private void setSerializer(StringRedisTemplate template) {
         Jackson2JsonRedisSerializer<Object> jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer<Object>(
                 Object.class);
         ObjectMapper om = new ObjectMapper();
@@ -90,5 +92,5 @@ public class RedisConfig {
         om.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
         jackson2JsonRedisSerializer.setObjectMapper(om);
         template.setValueSerializer(jackson2JsonRedisSerializer);
-    }
+    }*/
 }
