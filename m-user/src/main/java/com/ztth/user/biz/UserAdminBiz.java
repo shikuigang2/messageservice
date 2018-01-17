@@ -18,7 +18,15 @@ public class UserAdminBiz extends BaseBiz<AdminUserMapper,AdminUser> {
     public AdminUser getAdminUserByMobile(String mobile){
 
         Map<String,String> map = new HashMap<String,String>();
-        map.put("mobible",mobile);
+        map.put("mobile",mobile);
         return adminUserMapper.getUserByMobile(map);
+    }
+
+    public int addAdminUser(AdminUser adminUser){
+        return  adminUserMapper.insert(adminUser);
+    }
+
+    public int updateAdminUser(AdminUser adminUser){
+        return  adminUserMapper.updateByPrimaryKeySelective(adminUser);
     }
 }
