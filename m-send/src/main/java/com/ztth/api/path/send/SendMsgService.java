@@ -70,12 +70,12 @@ public class SendMsgService implements CommandLineRunner {
                  */
                Set<String> queueSet = redisQueueBiz.getSetQueue(ServerConstant.WAITING_SET);
                for(String queStr:queueSet){
-                   long lengthin = redisQueueBiz.getQueueLength(queStr);
+                   long lengthin = redisQueueBiz.getQueueLength("q_"+queStr);
                    //获取正在发送中队列长度
                    String enterpriseCode = queStr.substring(4);//企业代码
-                   long lengthout = redisQueueBiz.getQueueLength(ServerConstant.SEND_PREFIX+queStr.substring(4));
+                   long lengthout = redisQueueBiz.getQueueLength("q_"+ServerConstant.SEND_PREFIX+queStr.substring(4));
 
-                   String concurrent = redisQueueBiz.get("enterpriseCode");//该企业的最大并发数
+                   String concurrent = redisQueueBiz.get(enterpriseCode);//该企业的最大并发数
                     if(concurrent == null || concurrent.equals("")){
                         MobileChannel m = mobileChannelBiz.getMaxConcurrentNumber(enterpriseCode);
 
@@ -95,7 +95,7 @@ public class SendMsgService implements CommandLineRunner {
                        if(lengthin>0){
                            //System.out.println(queStr);
                            //出待发队列
-                           String objdata = redisQueueBiz.rpop(queStr);
+                           String objdata = redisQueueBiz.rpop("q_"+queStr);
                            //入正在发送队列
                            Message message = JSON.parseObject(objdata, new TypeReference<Message>() {});
                            //还有排队一种状态 忽略 暂时
@@ -109,64 +109,6 @@ public class SendMsgService implements CommandLineRunner {
                    }
                }
 
-               /*  MsgLog msgLog = JSON.parseObject(objdata, new TypeReference<MsgLog>() {});
-
-                RequestConfig requestConfig = RequestConfig.custom()
-                        .setSocketTimeout(15000)
-                        .setConnectTimeout(15000)
-                        .setConnectionRequestTimeout(15000)
-                        .build();
-
-                HttpPost httpPost = new HttpPost(httpUrl);// 创建httpPost
-                // 创建参数队列
-                List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
-                //post 传递参数
-                nameValuePairs.add(new BasicNameValuePair("mobile", msgLog.getMobile()));
-                nameValuePairs.add(new BasicNameValuePair("content", msgLog.getContent()));
-                nameValuePairs.add(new BasicNameValuePair("key", msgLog.getContent()));
-
-                try {
-                    httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs, reponseType));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-                CloseableHttpClient httpClient = null;
-                CloseableHttpResponse response = null;
-                HttpEntity entity = null;
-                String responseContent = null;
-
-                try {
-                    // 创建默认的httpClient实例.
-                    httpClient = HttpClients.createDefault();
-                    httpPost.setConfig(requestConfig);
-                    // 执行请求
-                    response = httpClient.execute(httpPost);
-                    entity = response.getEntity();
-                    responseContent = EntityUtils.toString(entity, reponseType);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                } finally {
-                    try {
-                        // 关闭连接,释放资源
-                        if (response != null) {
-                            response.close();
-                        }
-                        if (httpClient != null) {
-                            httpClient.close();
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }*/
-
-                //System.out.println(responseContent);
-                //跟进返回值处理
-                //System.out.println(objdata);
-
-               /* Thread.sleep(10000);
-                String json = redisQueueBiz.rpop(messageConfig.getQueueOut());
-                SpringUtil.getBean("msgLogBiz");*/
             }
 
     }

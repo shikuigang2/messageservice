@@ -39,8 +39,9 @@ server:
 
 message:
     httpUrl: http://www.api.zthysms.com
-    uri: ztthznhy
+    uid: ztthznhy
     key: 90yj1b # 接口调用 安全密钥
+    singatureWord: ""
     queueIn: messageIn
     queueOut: messageOut
     maxLength: 200 #发送链接最大长度

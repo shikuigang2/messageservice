@@ -158,10 +158,10 @@ public class RedisQueueBiz {
                 Jedis jedis = null;
                 try {
                         jedis = jedisPool.getResource();
-                        Set<String> keyset = jedis.keys(prefix+"%");
+                        Set<String> keyset = jedis.smembers(prefix);
                         long len = 0;
                         for (String str : keyset) {
-                                len +=jedis.llen(str);
+                                len +=jedis.llen("q_"+str);
                         }
 
                         return len;

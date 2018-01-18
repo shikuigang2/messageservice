@@ -75,8 +75,11 @@ public class msgSendController {
         if(!redisQueueBiz.isSetValue(ServerConstant.WAITING_SET,channelQueue)){
             redisQueueBiz.sSet(ServerConstant.WAITING_SET,channelQueue);
         }
-        //System.out.println(channelQueue);
-        redisQueueBiz.lpush(channelQueue,JSON.toJSONString(message));
+        //集合中的 值不能直接做 队列的键值
+        long aa = redisQueueBiz.lpush("q_"+channelQueue,JSON.toJSONString(message));
+
+        System.out.println(aa);
+
         return ResponseEntity.ok(200);
     }
 

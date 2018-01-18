@@ -4,6 +4,10 @@ import com.ztth.api.path.biz.ApiPathBiz;
 import com.ztth.api.path.biz.RedisQueueBiz;
 import com.ztth.api.path.config.MessageConfig;
 import com.ztth.core.constant.ServerConstant;
+import com.ztth.core.msg.ObjectRestResponse;
+import com.ztth.core.util.HttpRequest;
+import com.ztth.core.util.MD5Gen;
+import com.ztth.core.util.TimeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +24,7 @@ public class ApiPathController {
 
     @Autowired
     private ApiPathBiz apiPathBiz;
+
 
     @Autowired
     private RedisQueueBiz redisQueueBiz;
@@ -40,12 +45,14 @@ public class ApiPathController {
     @RequestMapping(value = "/waitingMSM")
     @ResponseBody
     public ResponseEntity<?> getWaitSMS( String channel) throws Exception {
-
+        Map<String,Object> result = new HashMap<String,Object>();
         if(channel != null){
-            return ResponseEntity.status(200).body(redisQueueBiz.getQueueList(ServerConstant.QUEUE_PREFIX+channel).size());
+            result.put("status",200);
+            result.put("size",redisQueueBiz.getQueueList("q_"+ServerConstant.QUEUE_PREFIX+channel).size());
+            return ResponseEntity.status(200).body(result);
         }else{
             Long  totalLength = redisQueueBiz.getTotalLength(ServerConstant.WAITING_SET);
-            Map<String,Long> result = new HashMap<String,Long>();
+            result.put("status",200);
             result.put("totalLen",totalLength);
             return ResponseEntity.status(200).body(result);
         }
@@ -113,8 +120,23 @@ public class ApiPathController {
     @RequestMapping(value = "/msmCount")
     @ResponseBody
     public ResponseEntity<?> msmCount(@RequestParam String channel) throws Exception {
-        //return ResponseEntity.status(200).body(redisQueueBiz.getQueueList(messageConfig.getQueueOut()));
-        return null;
+
+        String username = messageConfig.getUsername();
+        String password = messageConfig.getKey();
+        String tkey= TimeUtil.getNowTime("yyyyMMddHHmmss");
+
+        String endpass = MD5Gen.getMD5(MD5Gen.getMD5(password)+tkey);
+
+        String para = messageConfig.getHttpUrl()+"&username="+username+"&password="+endpass+"&tkey="+tkey;
+
+        String result = HttpRequest.sendPost(messageConfig.getHttpUrl(),para);
+
+        Map<String,Object> resMap= new HashMap<String,Object>();
+
+        resMap.put("status",200);
+        resMap.put("count",result);
+        return ResponseEntity.status(200).body(resMap);
+
     }
 
 }

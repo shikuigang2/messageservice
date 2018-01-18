@@ -38,9 +38,9 @@ server:
     port: 8762
 
 message:
-    httpUrl: http://testmsg.com
-    uri: 用户登录id
-    key: 23423k4j2234h2k34h # 接口调用 安全密钥
+    httpUrl: http://www.api.zthysms.com/balance.do
+    username: ztthznhy
+    key: 90yj1b # 接口调用 安全密钥
     queueIn: messageIn
     queueOut: messageOut
     maxLength: 200

@@ -37,9 +37,9 @@ public class UserAdminController {
         BaseResponse response = new BaseResponse();
         AdminUser user =  userAdminBiz.getAdminUserByMobile(mobile);
         if(user == null){
-           // resMap.put("code",400);
-            response.setStatus(400);
-            response.setMessage("invalid mobile");
+            resMap.put("status",400);
+          /*  response.setStatus(400);
+            response.setMessage("invalid mobile");*/
             resMap.put("msg","invalid mobile");
             return ResponseEntity.status(400).body(resMap);
         }else{
@@ -47,12 +47,12 @@ public class UserAdminController {
                 Map<String,String> map = new HashMap<String,String>();
                 String token = new Blowfish(msgkey).encryptString(mobile);
                 redisUserBiz.set(token,JSON.toJSONString(user), UserConstant.EXPIRT_USER);
-                resMap.put("code",200);
+                resMap.put("status",200);
                 resMap.put("token",token);
                 resMap.put("expire",UserConstant.EXPIRT_USER);
                 return ResponseEntity.status(200).body(resMap);
             }else{
-                resMap.put("code",400);
+                resMap.put("status",400);
                 resMap.put("msg","invalid key");
                 return ResponseEntity.status(400).body(resMap);
             }
@@ -114,7 +114,7 @@ public class UserAdminController {
         if(i==1){
             response.setStatus(200);
             response.setMessage("success");
-            return ResponseEntity.status(200).body("{code:200,msg:'success'}");
+            return ResponseEntity.status(200).body(response);
         }else{
             response.setStatus(500);
             response.setMessage("error");
