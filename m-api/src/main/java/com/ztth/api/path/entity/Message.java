@@ -1,5 +1,7 @@
 package com.ztth.api.path.entity;
 
+import com.ztth.api.path.annotation.Check;
+
 import java.util.Date;
 import javax.persistence.*;
 
@@ -11,8 +13,10 @@ public class Message {
 
     private Integer userid;
 
+    @Check(notNull = true, maxLen = 11)
     private String mobile;
 
+    @Check(notNull = true, maxLen = 70)
     private String content;
 
     @Column(name = "createTime")

@@ -11,9 +11,7 @@ import org.springframework.cloud.netflix.feign.EnableFeignClients;
 @SpringBootApplication
 @EnableFeignClients
 public class APIPathBootstrap {
-
     public static void main(String[] args) {
         new SpringApplicationBuilder(APIPathBootstrap.class).web(true).run(args);
     }
-
 }

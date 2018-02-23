@@ -30,6 +30,27 @@ spring:
         testOnReturn: false
         poolPreparedStatements: true
         maxOpenPreparedStatements: 20
+    cloud:
+        instance-count: 2
+        instance-index: 0
+        stream:
+            bindings:
+                output:
+                  destination: msmwaiting
+                  content-type: application/json
+                  group: average
+                  producer :
+                      partitionCount : 2
+                      partitionKeyExpression : payload
+
+            kafka:
+                binder:
+                  brokers: 39.106.156.121:9092
+                  zk-nodes: 39.106.156.121:2181
+                  auto-add-partitions: true
+                  auto-create-topics: true
+                  min-partition-count: 1
+
 mybatis:
     basepackage: com.ztth.api.path.mapper
     xmlLocation: classpath:mapper/**/*.xml
@@ -90,6 +111,9 @@ ztth:
         singleUrl: http://www.api.zthysms.com/sendSms.do
         batchUrl: http://www.api.zthysms.com/sendSmsBatch.do
         messageCount: http://www.api.zthysms.com/balance.do
+
+
+
 
 
 

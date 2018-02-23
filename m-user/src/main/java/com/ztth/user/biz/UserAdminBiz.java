@@ -31,6 +31,10 @@ public class UserAdminBiz extends BaseBiz<AdminUserMapper,AdminUser> {
         return  adminUserMapper.updateByPrimaryKeySelective(adminUser);
     }
 
+    public int updateAdminUserByMobile(AdminUser adminUser){
+        return  adminUserMapper.updateUserByMobile(adminUser);
+    }
+
     public List<AdminUser> getAdminUserList(){
         return super.selectListAll();
     }

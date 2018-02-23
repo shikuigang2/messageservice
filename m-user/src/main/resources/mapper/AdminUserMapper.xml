@@ -17,4 +17,23 @@
     SELECT  *  FROM  t_adminuser  WHERE  mobile = #{mobile}
   </select>
 
+
+  <update id="updateUserByMobile" parameterType="com.ztth.user.entity.AdminUser" >
+    update t_adminuser
+    <set >
+      <if test="username != null" >
+        username = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="msgkey != null" >
+        msgkey = #{msgkey,jdbcType=VARCHAR},
+      </if>
+
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+    </set>
+    where mobile = #{mobile,jdbcType=VARCHAR}
+  </update>
+
+
 </mapper>

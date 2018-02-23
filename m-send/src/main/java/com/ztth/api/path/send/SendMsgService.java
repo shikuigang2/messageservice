@@ -8,18 +8,7 @@ import com.ztth.api.path.biz.RedisQueueBiz;
 import com.ztth.api.path.config.MessageConfig;
 import com.ztth.api.path.entity.Message;
 import com.ztth.api.path.entity.MobileChannel;
-import com.ztth.api.path.spring.SpringUtil;
 import com.ztth.core.constant.ServerConstant;
-import org.apache.http.HttpEntity;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.config.RequestConfig;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +23,7 @@ import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Component
+//@Component
 public class SendMsgService implements CommandLineRunner {
 
     private Logger logger = LoggerFactory.getLogger(SendMsgService.class);
@@ -70,6 +59,7 @@ public class SendMsgService implements CommandLineRunner {
                  */
                Set<String> queueSet = redisQueueBiz.getSetQueue(ServerConstant.WAITING_SET);
                for(String queStr:queueSet){
+                   //获取待发队列长度
                    long lengthin = redisQueueBiz.getQueueLength("q_"+queStr);
                    //获取正在发送中队列长度
                    String enterpriseCode = queStr.substring(4);//企业代码
@@ -93,17 +83,24 @@ public class SendMsgService implements CommandLineRunner {
                        //break; //跳出当前循环
                    }else{
                        if(lengthin>0){
-                           //System.out.println(queStr);
+                          /* System.out.println(redisQueueBiz.getQueueLength("q_"+queStr));
+                           System.out.println(queStr);*/
                            //出待发队列
                            String objdata = redisQueueBiz.rpop("q_"+queStr);
-                           //入正在发送队列
-                           Message message = JSON.parseObject(objdata, new TypeReference<Message>() {});
-                           //还有排队一种状态 忽略 暂时
-                          // redisQueueBiz.lpush(ServerConstant.SEND_PREFIX+queStr.substring(4),objdata);//准备发送不一定执行
-                           // System.out.println("创建线程");
+                           if(objdata == null ){
+                               System.out.println("lost");
+                                //return ;
+                           }else{
+                               //入正在发送队列
+                               Message message = JSON.parseObject(objdata, new TypeReference<Message>() {});
+                               //还有排队一种状态 忽略 暂时
+                               //redisQueueBiz.lpush(ServerConstant.SEND_PREFIX+queStr.substring(4),objdata);//准备发送不一定执行
+                               // System.out.println("创建线程");
 
-                           messageConfig.setChannel(queStr);
-                           executorService.execute(new PostSendThread(messageConfig,message));
+                               messageConfig.setChannel(queStr);
+                               executorService.execute(new PostSendThread(messageConfig,message));
+                           }
+
                        }
 
                    }

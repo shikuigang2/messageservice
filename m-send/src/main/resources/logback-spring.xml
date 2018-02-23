@@ -53,7 +53,7 @@
 
 
     <root level="info,ERROR">
-        <appender-ref ref="console" />
+       <!-- <appender-ref ref="console" />-->
         <appender-ref ref="errorAppender" />
     </root>
 

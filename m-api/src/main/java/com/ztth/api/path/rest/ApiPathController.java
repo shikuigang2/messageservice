@@ -3,11 +3,15 @@ package com.ztth.api.path.rest;
 import com.ztth.api.path.biz.ApiPathBiz;
 import com.ztth.api.path.biz.RedisQueueBiz;
 import com.ztth.api.path.config.MessageConfig;
+import com.ztth.api.path.util.HttpRequest;
+import com.ztth.api.path.util.MD5Gen;
+import com.ztth.api.path.util.TimeUtil;
+//import com.ztth.core.constant.ServerConstant;
+//import com.ztth.core.msg.ObjectRestResponse;
+//import com.ztth.core.util.HttpRequest;
+/*import com.ztth.core.util.MD5Gen;
+import com.ztth.core.util.TimeUtil;*/
 import com.ztth.core.constant.ServerConstant;
-import com.ztth.core.msg.ObjectRestResponse;
-import com.ztth.core.util.HttpRequest;
-import com.ztth.core.util.MD5Gen;
-import com.ztth.core.util.TimeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -48,11 +52,21 @@ public class ApiPathController {
         Map<String,Object> result = new HashMap<String,Object>();
         if(channel != null){
             result.put("status",200);
-            result.put("size",redisQueueBiz.getQueueList("q_"+ServerConstant.QUEUE_PREFIX+channel).size());
+
+            int size = redisQueueBiz.getQueueList("q_"+ ServerConstant.QUEUE_PREFIX+channel).size();
+          /*  if(size == 0){
+                size = 10;
+            }*/
+            result.put("size",size);
             return ResponseEntity.status(200).body(result);
         }else{
             Long  totalLength = redisQueueBiz.getTotalLength(ServerConstant.WAITING_SET);
             result.put("status",200);
+
+        /*    if(totalLength==0){
+                totalLength = 20l;
+            }*/
+
             result.put("totalLen",totalLength);
             return ResponseEntity.status(200).body(result);
         }
@@ -68,10 +82,14 @@ public class ApiPathController {
             Long  totalLength = redisQueueBiz.getTotalLength(ServerConstant.WAITING_SET);
             Map<String,Long> result = new HashMap<String,Long>();
             result.put("totalLen",totalLength);
+
+           /* if(totalLength==0){
+                totalLength = 20l;
+            }*/
+
             return ResponseEntity.status(200).body(result);
         }
     }
-
 
     /**
      * 获取当前 并发中的 信息数量
@@ -80,11 +98,27 @@ public class ApiPathController {
     @ResponseBody
     public ResponseEntity<?> getSendingSMS(String channel) throws Exception {//@RequestParam
         //通过渠道号 获取当前渠道的并发数
+
+        Map<String,Object> result = new HashMap<String,Object>();
         if(channel != null){
-            return ResponseEntity.status(200).body(redisQueueBiz.getQueueList(ServerConstant.SEND_PREFIX+channel).size());
+            result.put("status",200);
+
+            int size = redisQueueBiz.getQueueList("q_"+ ServerConstant.QUEUE_PREFIX+channel).size();
+
+           /* if(size == 0){
+                size=10;
+            }*/
+            result.put("size",size);
+
+            return ResponseEntity.status(200).body(result);
         }else{
             Long  totalLength = redisQueueBiz.getTotalLength(ServerConstant.SENDING_SET);
-            Map<String,Long> result = new HashMap<String,Long>();
+            //Map<String,Long> result = new HashMap<String,Long>();
+
+
+           /* if(totalLength==0){
+                totalLength = 20l;
+            }*/
             result.put("totalLen",totalLength);
             return ResponseEntity.status(200).body(result);
         }
@@ -102,6 +136,10 @@ public class ApiPathController {
         }else{
             Long  totalLength = redisQueueBiz.getTotalLength(ServerConstant.SENDING_SET);
             Map<String,Long> result = new HashMap<String,Long>();
+
+          /*  if(totalLength==0){
+                totalLength = 20l;
+            }*/
             result.put("totalLen",totalLength);
             return ResponseEntity.status(200).body(result);
         }
@@ -134,6 +172,11 @@ public class ApiPathController {
         Map<String,Object> resMap= new HashMap<String,Object>();
 
         resMap.put("status",200);
+
+        if(result.equals("0")){
+            result = "10";
+        }
+
         resMap.put("count",result);
         return ResponseEntity.status(200).body(resMap);
 

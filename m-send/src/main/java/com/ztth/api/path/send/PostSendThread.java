@@ -1,37 +1,26 @@
 package com.ztth.api.path.send;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.TypeReference;
-import com.ztth.api.path.biz.MobileDataBiz;
 import com.ztth.api.path.biz.MsgLogBiz;
 import com.ztth.api.path.biz.RedisQueueBiz;
 import com.ztth.api.path.config.MessageConfig;
 import com.ztth.api.path.entity.Message;
 import com.ztth.api.path.entity.MessageLog;
-import com.ztth.api.path.entity.MobileData;
 import com.ztth.api.path.spring.SpringUtil;
 import com.ztth.core.constant.ServerConstant;
 import com.ztth.core.util.HttpRequest;
 import com.ztth.core.util.MD5Gen;
 import com.ztth.core.util.TimeUtil;
-import org.apache.http.Header;
 import org.apache.http.HttpEntity;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
 
-import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.util.EntityUtils;
-
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.*;
+
 
 public class PostSendThread extends Thread {
 
@@ -75,6 +64,9 @@ public class PostSendThread extends Thread {
             String channel = messageConfig.getChannel();
             //String objdata = redisQueueBiz.rpop(messageConfig.getChannel());
             String dataSending = JSON.toJSONString(message);
+
+            //System.out.println("dataSending:"+dataSending);
+            //System.out.println("message:"+message);
             String sendQueue = ServerConstant.SEND_PREFIX + channel.substring(4);
             redisQueueBiz.lpush("q_"+sendQueue,dataSending);
 
@@ -110,11 +102,11 @@ public class PostSendThread extends Thread {
         }
         StringBuilder  sb = new StringBuilder();
 
-        try {
+      /*  try {
             content=URLEncoder.encode(content, "utf-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
-        }
+        }*/
 
         sb.append(url);
         sb.append("&username=").append(username);
@@ -123,10 +115,14 @@ public class PostSendThread extends Thread {
         sb.append("&mobile=").append(mobile);
         sb.append("&content=").append(content);
         //sb.append("&msgid=").append(msgid);
-
+      /*  int i = 0;
+        if(i==0){
+            return ;
+        }
+*/
         //String param="url="+url+"&username="+username+"&password="+MD5Gen.getMD5(MD5Gen.getMD5(password)+tkey)+"&tkey="+tkey+"&time="+time+"&mobile="+mobile+"&content="+content+"&xh="+xh;//定时信息url输出
         String param = sb.toString();
-        //System.out.println(param);
+        System.out.println(param);
         String ret= HttpRequest.sendPost(url,param);//定时信息只可为post方式提交
         String rescode = ret.split(",")[0];
 
@@ -138,7 +134,7 @@ public class PostSendThread extends Thread {
         }else{
             redisQueueBiz.delqueue("q_"+ServerConstant.SEND_PREFIX+channel.substring(4),dataSending);
             msglog.setAttr2("error");
-            msglog.setAttr3(rescode);
+            msglog.setAttr3(ret);
         }
 
             //从发送队列中移除

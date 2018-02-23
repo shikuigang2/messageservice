@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.ztth.api.path.rest.ApiPathController;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,11 +16,12 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import javax.servlet.http.HttpServletRequest;
 
 @Configuration
+@Aspect
 public class LogRecordAspect {
     private static final Logger logger = LoggerFactory.getLogger(ApiPathController.class);
 
     // 定义切点Pointcut
-    @Pointcut("execution(* com.ztth..api.path.rest.*Controller.*(..))")
+    @Pointcut("execution(* com.ztth.api.path.rest.*Controller.*(..))")
     public void excudeService() {
 
     }
@@ -39,6 +41,7 @@ public class LogRecordAspect {
         Object result = pjp.proceed();
         //Gson gson = new Gson();
         logger.info("请求结束，controller的返回值是 " + JSON.toJSONString(result));
+
         return result;
     }
 }

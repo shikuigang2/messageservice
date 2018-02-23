@@ -5,15 +5,14 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 
-import com.ztth.api.path.check.Check;
-import com.ztth.api.path.check.Valid;
+import com.ztth.api.path.annotation.Check;
+import com.ztth.api.path.annotation.Valid;
 import com.ztth.api.path.util.PhoneFormatCheckUtils;
 import com.ztth.core.base.BaseModel;
 import com.ztth.core.exception.ParameterException;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 

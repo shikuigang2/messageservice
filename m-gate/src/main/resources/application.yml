@@ -28,15 +28,18 @@ server:
     port: 8765 #启动端口
 #
 zuul:
+  host:
+      maxTotalConnections: 100000
+      maxPerRouteConnections: 10000
+  semaphore:
+      maxSemaphores: 15000
   routes:
       admin:
             path: /user/**
             serviceId: m-user
-
       msg:
             path: /msg/**
             serviceId: m-api
-
       auth:
             path: /auth/**
             serviceId: m-auth

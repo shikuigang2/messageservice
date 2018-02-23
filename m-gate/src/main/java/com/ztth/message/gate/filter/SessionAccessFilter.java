@@ -46,9 +46,9 @@ public class SessionAccessFilter extends ZuulFilter {
         //url 验证是否 需要拦截
         //过滤 请求链接的有效性
         //操作在转发之前
-        System.out.println(requestUri);
+        /*System.out.println(requestUri);
         System.out.println(request.getRemoteAddr());
-        System.out.println(request.getRemoteHost());
+        System.out.println(request.getRemoteHost());*/
         if(requestUri.indexOf("/user/getToken")==-1){
             //判断token 是否过期
             String token  =  request.getParameter("token");

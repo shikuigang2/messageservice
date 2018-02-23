@@ -11,7 +11,7 @@ spring:
         default-property-inclusion: non_null
     datasource:
         name: test
-        url: jdbc:mysql://39.106.156.121:3306/ztthmsg?useUnicode=true&characterEncoding=UTF8
+        url: jdbc:mysql://39.106.156.121:3306/ztthmsg?useUnicode=true&characterEncoding=UTF8 #39.106.156.121,172.17.61.43
         username: root
         password: ztthpassword
         # 使用druid数据源
@@ -30,12 +30,43 @@ spring:
         testOnReturn: false
         poolPreparedStatements: true
         maxOpenPreparedStatements: 20
+    cloud:
+         instance-count: 2
+         instance-index: 0
+         stream:
+            kafka:
+              binder:
+                brokers: 39.106.156.121:9092
+                zk-nodes: 39.106.156.121:2181
+                auto-add-partitions: true
+                auto-create-topics: true
+                min-partition-count: 1
+            bindings:
+                input:
+                    destination: msmwaiting
+                    content-type: application/json
+                    group: average
+                    counsumer:
+                        partitioned : true
+                input:
+                    destination: msmsending
+                    content-type: application/json
+                    group: sending
+                    counsumer:
+                          partitioned : true
+                output:
+                    destination: msmsending
+                    content-type: application/json
+                    group: sending
+                    counsumer:
+                    partitioned : true
+
 mybatis:
     basepackage: com.ztth.api.path.mapper
     xmlLocation: classpath:mapper/**/*.xml
 
 server:
-    port: 8767
+    port: 8766
 
 message:
     httpUrl: http://www.api.zthysms.com
@@ -52,7 +83,7 @@ message:
 
 redis:
     database: 1
-    host: 39.106.156.121
+    host: 39.106.156.121 #39.106.156.121
     password:
     port: 6379
     timeout: 3000

@@ -73,7 +73,7 @@ public class UserAdminController {
             response.setStatus(500);
             response.setMessage("key is null");
             return  ResponseEntity.status(500).body(response);
-        }else if(mobile == null || !PhoneFormatCheckUtils.isChinaPhoneLegal(mobile)){
+        }else if(mobile == null){//!PhoneFormatCheckUtils.isChinaPhoneLegal(mobile)
             response.setStatus(500);
             response.setMessage("mobile error");
             return  ResponseEntity.status(500).body(response);
@@ -98,9 +98,12 @@ public class UserAdminController {
             response.setMessage("internal error");
            return  ResponseEntity.status(500).body(response);
         }else{
-            response.setStatus(200);
-            response.setMessage("success");
-            return ResponseEntity.status(200).body(response);
+
+            ObjectRestResponse o = new ObjectRestResponse();
+            o.setStatus(200);
+            o.setMessage("success");
+            o.setData(adminUser);
+            return ResponseEntity.status(200).body(o);
         }
 
     }
@@ -109,7 +112,8 @@ public class UserAdminController {
     @ResponseBody
     public ResponseEntity<?> updateUser(AdminUser adminUser) throws Exception {
 
-        int i = userAdminBiz.updateAdminUser(adminUser);
+        //int i = userAdminBiz.updateAdminUser(adminUser);
+        int i = userAdminBiz.updateAdminUserByMobile(adminUser);
         BaseResponse response  = new BaseResponse();
         if(i==1){
             response.setStatus(200);
@@ -153,6 +157,27 @@ public class UserAdminController {
     @RequestMapping(value = "/getAdminList")
     @ResponseBody
     public ResponseEntity<?> getAdminList(String token) throws Exception {
+
+        String userStr = redisUserBiz.get(token.trim());
+        ObjectRestResponse response  = new ObjectRestResponse();
+        if(userStr == null){
+
+            response.setStatus(200);
+            response.setMessage("token invalid or overdue");
+
+            return ResponseEntity.status(200).body(response);
+        }else{
+            response.setStatus(200);
+            response.setData(userAdminBiz.getAdminUserList());
+            return ResponseEntity.status(200).body(response);
+        }
+
+    }
+
+
+    @RequestMapping(value = "/addMessage")
+    @ResponseBody
+    public ResponseEntity<?> addLog(String token) throws Exception {
 
         String userStr = redisUserBiz.get(token.trim());
         ObjectRestResponse response  = new ObjectRestResponse();

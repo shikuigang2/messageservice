@@ -7,4 +7,6 @@ import java.util.Map;
 
 public interface AdminUserMapper extends Mapper<AdminUser> {
     AdminUser getUserByMobile(Map<String,String> map);
+
+    int updateUserByMobile(AdminUser adminUser);
 }
