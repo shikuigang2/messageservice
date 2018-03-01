@@ -20,13 +20,4 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         super.addInterceptors(registry);
     }
 
-  /*  @Bean
-    ServiceAuthRestInterceptor getServiceAuthRestInterceptor(){
-        return new ServiceAuthRestInterceptor();
-    }
-
-    @Bean
-    UserAuthRestInterceptor getUserAuthRestInterceptor(){
-        return new UserAuthRestInterceptor();
-    }*/
 }

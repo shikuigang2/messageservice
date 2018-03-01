@@ -6,6 +6,8 @@
     <file url="file://$PROJECT_DIR$/m-core" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/m-gate" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/m-idgenerate" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/m-kafkaconsumer" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/m-kafkaproducer" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/m-registcenter" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/m-send" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/m-user" charset="UTF-8" />

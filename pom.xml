@@ -16,6 +16,8 @@
         <module>m-core</module>
         <module>m-send</module>
         <module>m-idgenerate</module>
+        <module>m-kafkaproducer</module>
+        <module>m-kafkaconsumer</module>
     </modules>
 
     <parent>

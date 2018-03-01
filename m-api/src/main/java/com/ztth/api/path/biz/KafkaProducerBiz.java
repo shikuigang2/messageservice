@@ -10,9 +10,9 @@ import org.springframework.integration.support.MessageBuilder;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-@EnableBinding(value ={ MessageSource.class })
+//@EnableBinding(value ={ MessageSource.class })
 //@EnableBinding(value ={Source.class })
-@Component
+//@Component
 public class KafkaProducerBiz {
 
     @Autowired

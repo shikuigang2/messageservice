@@ -29,8 +29,8 @@ public class msgSendController {
 /*    @Autowired
     private MessageKafkaBiz messageKafkaBiz;*/
 
-    @Autowired
-    private KafkaProducerBiz kafkaProducerBiz;
+/*    @Autowired
+    private KafkaProducerBiz kafkaProducerBiz;*/
 
     @Autowired
     private RedisQueueBiz redisQueueBiz;
@@ -102,8 +102,8 @@ public class msgSendController {
     public ResponseEntity<?> sendGet(@Valid Message message) throws Exception {
 
         //messageKafkaBiz.sendMessage(JSON.toJSONString(message));
-        boolean res = kafkaProducerBiz.messageInMessageQueue(JSON.toJSONString(message));
-        //boolean res = true;
+        // boolean res = kafkaProducerBiz.messageInMessageQueue(JSON.toJSONString(message));
+        boolean res = true;
         if(res){
             return  ResponseEntity.ok(200);
         }else{

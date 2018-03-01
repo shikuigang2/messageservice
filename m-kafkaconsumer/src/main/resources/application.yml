@@ -1,0 +1,120 @@
+logging:
+    level:
+        tk.mybatis: DEBUG
+        com.ztth.msg.api: DEBUG
+spring:
+    application:
+        name: m-kafkaconsumer
+    jackson:
+        date-format: yyyy-MM-dd HH:mm:ss
+        time-zone: GMT+8
+        default-property-inclusion: non_null
+    datasource:
+        name: test
+        url: jdbc:mysql://39.106.156.121:3306/ztthmsg?useUnicode=true&characterEncoding=UTF8 #39.106.156.121,172.17.61.43
+        username: root
+        password: ztthpassword
+        # 使用druid数据源
+        type: com.alibaba.druid.pool.DruidDataSource
+        driver-class-name: com.mysql.jdbc.Driver
+        filters: stat
+        maxActive: 20
+        initialSize: 1
+        maxWait: 60000
+        minIdle: 1
+        timeBetweenEvictionRunsMillis: 60000
+        minEvictableIdleTimeMillis: 300000
+        validationQuery: select 'x'
+        testWhileIdle: true
+        testOnBorrow: false
+        testOnReturn: false
+        poolPreparedStatements: true
+        maxOpenPreparedStatements: 20
+    cloud:
+         instance-count: 2
+         instance-index: 0
+         stream:
+            kafka:
+              binder:
+                brokers: 39.106.156.121:9092
+                zk-nodes: 39.106.156.121:2181
+                auto-add-partitions: true
+                auto-create-topics: true
+                min-partition-count: 1
+            bindings:
+                input:
+                    destination: msmwaiting
+                    content-type: application/json
+                    group: average1
+                    counsumer:
+                        partitioned : true
+
+
+mybatis:
+    basepackage: com.ztth.api.path.mapper
+    xmlLocation: classpath:mapper/**/*.xml
+
+server:
+    port: 8771
+
+message:
+    httpUrl: http://www.api.zthysms.com
+    uid: ztthznhy
+    key: 90yj1b # 接口调用 安全密钥
+    singatureWord: ""
+    queueIn: messageIn
+    queueOut: messageOut
+    maxLength: 200 #发送链接最大长度
+    reponseType: utf-8
+    singleSendUrl: http://www.api.zthysms.com/sendSms.do
+    batchSendUrl: http://www.api.zthysms.com/sendSmsBatch.do
+    messageCount: http://www.api.zthysms.com/balance.do
+
+redis:
+    database: 1
+    host: 39.106.156.121 #39.106.156.121
+    password:
+    port: 6379
+    timeout: 3000
+    pool:
+          max-active: 20
+          max-idle: 5
+          max-wait: 3000
+    cluster:
+          nodes: 39.106.156.121:6379
+          timeout: 3000
+          maxAttempts: 5
+
+security:
+  basic:
+    enabled: true
+  user:
+    name: ztth  # 用户名
+    password: ztthpass   # 用户密码
+
+eureka:
+    instance:
+        statusPageUrlPath: /info
+        healthCheckUrlPath: /health
+        lease-expiration-duration-in-seconds: 30
+        lease-renewal-interval-in-seconds: 10
+        # docker 部署开启
+#        prefer-ip-address: true
+#        ip-address: 127.0.0.1
+    client:
+        registerWithEureka: true
+        fetchRegistry: true
+        serviceUrl:
+             defaultZone: http://${security.user.name}:${security.user.password}@localhost:8761/eureka/
+        healthcheck:
+              enabled: true
+
+#非短信渠道商 第三方接口 临时调用
+
+
+
+
+
+
+
+

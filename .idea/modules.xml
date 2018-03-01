@@ -6,6 +6,8 @@
       <module fileurl="file://$PROJECT_DIR$/m-core/m-core.iml" filepath="$PROJECT_DIR$/m-core/m-core.iml" />
       <module fileurl="file://$PROJECT_DIR$/m-gate/m-gate.iml" filepath="$PROJECT_DIR$/m-gate/m-gate.iml" />
       <module fileurl="file://$PROJECT_DIR$/m-idgenerate/m-idgenerate.iml" filepath="$PROJECT_DIR$/m-idgenerate/m-idgenerate.iml" />
+      <module fileurl="file://$PROJECT_DIR$/m-kafkaconsumer/m-kafkaconsumer.iml" filepath="$PROJECT_DIR$/m-kafkaconsumer/m-kafkaconsumer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/m-kafkaproducer/m-kafkaproducer.iml" filepath="$PROJECT_DIR$/m-kafkaproducer/m-kafkaproducer.iml" />
       <module fileurl="file://$PROJECT_DIR$/m-registcenter/m-registcenter.iml" filepath="$PROJECT_DIR$/m-registcenter/m-registcenter.iml" />
       <module fileurl="file://$PROJECT_DIR$/m-send/m-send.iml" filepath="$PROJECT_DIR$/m-send/m-send.iml" />
       <module fileurl="file://$PROJECT_DIR$/m-api/m-send.iml" filepath="$PROJECT_DIR$/m-api/m-send.iml" />
